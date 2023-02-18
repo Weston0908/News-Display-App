@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, Button } from "@mui/material";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
@@ -12,6 +12,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 export default function NewsItem(props) {
+  const LOCAL_STORAGE_KEY = "favourite";
   const { news, handleFav } = props;
   const [isActive, setIsActive] = useState(false);
   const [hover, setHover] = useState(false);
@@ -20,6 +21,15 @@ export default function NewsItem(props) {
     setIsActive(!isActive);
     handleFav({ ...props, isActive });
   };
+
+  useEffect(() => {
+    const response = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
+    response.forEach((item) => {
+      if (item.news.title === news.title) {
+        setIsActive(!isActive);
+      }
+    });
+  }, []);
 
   return (
     <Card sx={{ height: 430 }}>
@@ -49,13 +59,13 @@ export default function NewsItem(props) {
             image={news.urlToImage}
             alt="Image not available"
           />
-          <CardContent>
+          <CardContent sx={{ pb: 0 }}>
             <Typography
               variant="body2"
               color="text.secondary"
-              sx={{ height: 80 }}
+              sx={{ height: 80, overflow: "hidden" }}
             >
-              {news.title}
+              {news.description}
             </Typography>
           </CardContent>
         </div>

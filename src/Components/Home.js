@@ -11,7 +11,6 @@ const urlParam = {
   from: "2023-02-08",
   sortBy: "popularity",
   apiKey: `${API_KEY}`,
-  pageSize: "10",
 };
 
 const url = new URL("https://newsapi.org/v2/everything?");
@@ -19,9 +18,7 @@ url.searchParams.set("q", urlParam.query);
 url.searchParams.set("from", urlParam.from);
 url.searchParams.set("sortBy", urlParam.sortBy);
 url.searchParams.set("apiKey", urlParam.apiKey);
-url.searchParams.set("pageSize", urlParam.pageSize);
 
-const LOCAL_STORAGE_LOGIN_KEY = "login";
 const LOCAL_STORAGE_KEY = "favourite";
 
 function Home() {
@@ -76,6 +73,10 @@ function Home() {
     url.searchParams.set("pageSize", `${pages}`);
     retrieveNews();
   }, [pages]);
+
+  useEffect(() => {
+    handleSearch(searchItem);
+  }, [news]);
 
   useEffect(() => {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(favItem));
